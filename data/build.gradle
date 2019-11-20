@@ -32,6 +32,12 @@ dependencies {
     implementation deps.kotlin
     implementation androidx.app_compat
     implementation androidx.core
+
+    implementation retrofit.core
+    implementation retrofit.gson
+
+    implementation coroutine.core
+
     testImplementation test.junit
     androidTestImplementation android_test.junit
     androidTestImplementation android_test.espresso
