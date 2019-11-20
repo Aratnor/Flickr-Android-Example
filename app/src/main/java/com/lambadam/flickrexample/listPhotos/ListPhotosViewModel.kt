@@ -5,12 +5,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lambadam.domain.listphotos.ListPhotosProvider
+import com.lambadam.domain.listphotos.ResetPhotoPageProvider
 import com.lambadam.domain.model.photoModels.Photo
 import com.lambadam.domain.model.photoModels.Response
 import kotlinx.coroutines.launch
 
 class ListPhotosViewModel(
-    private val listPhotoProvider: ListPhotosProvider
+    private val listPhotoProvider: ListPhotosProvider,
+    private val resetPhotoPageProvider: ResetPhotoPageProvider
 )  : ViewModel() {
 
     //val responseState: MutableLiveData<Response> = MutableLiveData()
@@ -25,6 +27,12 @@ class ListPhotosViewModel(
                 Log.i("Error API :",resource.error!!.message.toString())
                 throw resource.error!!
             }
+        }
+    }
+
+    fun resetPhotoPage() {
+        viewModelScope.launch {
+            resetPhotoPageProvider.execute()
         }
     }
 

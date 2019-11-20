@@ -54,8 +54,13 @@ class ListPhotosAdapter(private val context: Context,
             .into(imageView)
     }
     fun updatePhotos(newPhotos: List<Photo> ) {
+        val size = photos.size
         photos.addAll(newPhotos)
-        notifyDataSetChanged()
+        notifyItemRangeInserted(size,newPhotos.size)
+    }
+
+    fun clearCache() {
+        photos.clear()
     }
 
     private fun preparePhotoUrl(photo: Photo): String {

@@ -53,4 +53,7 @@ class PhotoDatabase private constructor(
         Log.i("Response",response.toString())
         return Resource.success(response)
     }
+    fun resetPage() {
+        page = 0
+    }
 }
