@@ -1,5 +1,6 @@
 package com.lambadam.flickrexample.listPhotos
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -12,18 +13,24 @@ class ListPhotosViewModel(
     private val listPhotoProvider: ListPhotosProvider
 )  : ViewModel() {
 
-    val responseState: MutableLiveData<Response> = MutableLiveData()
+    //val responseState: MutableLiveData<Response> = MutableLiveData()
     val photos: MutableLiveData<List<Photo>> = MutableLiveData()
 
     fun updateAllPhotos() {
         viewModelScope.launch {
-             photos.value = listPhotoProvider.execute().data!!.photos.photo
+            val resource = listPhotoProvider.execute()
+            if(resource.data != null) {
+                photos.value = resource.data!!.photos.photo
+            } else if(resource.error != null) {
+                Log.i("Error API :",resource.error!!.message.toString())
+                throw resource.error!!
+            }
         }
     }
 
-    fun getResponse(){
+    /*fun getResponse(){
         viewModelScope.launch {
             responseState.value = listPhotoProvider.execute().data!!
         }
-    }
+    }*/
 }

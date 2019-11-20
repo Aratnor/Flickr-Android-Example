@@ -6,7 +6,7 @@ import com.lambadam.domain.model.Resource
 import com.lambadam.domain.model.photoModels.Response
 
 class ImpListPhotosRepository constructor(
-    val photoDatabase: PhotoDatabase
+    private val photoDatabase: PhotoDatabase
 ): ListPhotosRepository {
 
 

@@ -9,13 +9,13 @@ import retrofit2.Retrofit
 import retrofit2.await
 
 class PhotoDatabase private constructor(
-    private val retrofitClient: Retrofit) {
+    retrofitClient: Retrofit) {
 
     private val mRetroFitClient = retrofitClient
 
     private val method = "flickr.photos.getRecent"
     private val api_key = "4bec4c1a302d3b59a228a9413429ae85"
-    private val per_page = 10
+    private val per_page = 20
     private var page = 0
     private val format = "json"
     private val nojsoncallback = "1"

@@ -10,14 +10,31 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.lambadam.domain.model.photoModels.Photo
 import com.lambadam.flickrexample.R
-class ListPhotosAdapter(private val context: Context, customPhotos: List<Photo>): RecyclerView.Adapter<ListPhotosAdapter.ViewHolder>() {
 
-    var photos: MutableList<Photo> = customPhotos.toMutableList()
+
+class ListPhotosAdapter(private val context: Context,
+                        customPhotos: List<Photo>,
+                        onItemClickListener: OnItemClickListener
+): RecyclerView.Adapter<ListPhotosAdapter.ViewHolder>() {
+
+    private var photos: MutableList<Photo> = customPhotos.toMutableList()
+
+    private val mOnItemClickListener: OnItemClickListener = onItemClickListener
+
+    interface OnItemClickListener {
+        fun onItemClick(photo: Photo,photoUrl: String)
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val itemView = LayoutInflater
             .from(parent.context)
             .inflate(R.layout.photo_recycler_item,parent,false)
-        return ViewHolder(itemView)
+        val viewHolder = ViewHolder(itemView)
+        viewHolder.itemView.setOnClickListener{
+            mOnItemClickListener.onItemClick(photos[viewHolder.adapterPosition],
+                preparePhotoUrl(photos[viewHolder.adapterPosition]))
+        }
+        return viewHolder
     }
 
     override fun getItemCount(): Int {
