@@ -34,12 +34,6 @@ class MainActivity : AppCompatActivity() {
             .get(ListPhotosViewModel::class.java)
     }
 
-    override fun onStart() {
-        super.onStart()
-        if(!isNetworkAvailable()){
-            showNetworkConAlertDialog("You need internet connection for use this app")
-        } else viewModel.updateAllPhotos()
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,6 +44,12 @@ class MainActivity : AppCompatActivity() {
             mAdapter.updatePhotos(it!!)
             mAdapter.notifyDataSetChanged()
         })
+        setInitPhotos()
+    }
+    private fun setInitPhotos() {
+        if(!isNetworkAvailable()){
+            showNetworkConAlertDialog("You need internet connection for use this app")
+        } else viewModel.updateAllPhotos()
     }
 
     private fun startShowIntent(photo: Photo,photoUrl: String) {
@@ -65,16 +65,16 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setRecyclerViewScrollListener() {
-        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                if(!recyclerView.canScrollVertically(1) && dy != 0)
-                {
-                    if(isNetworkAvailable()){
-                        viewModel.updateAllPhotos()
-                        mAdapter.notifyDataSetChanged()
-                    } else showNetworkConAlertDialog("You need internet connection for load more photos")
+        var loading = false
+        recyclerView.addOnScrollListener(object : EndlessOnScrollListener(mLinearLayoutManager) {
+            override fun onScrolledToEnd() {
+                if(!loading){
+                    loading = true
+                    viewModel.updateAllPhotos()
                 }
+                loading = false
             }
+
         })
     }
     private fun showNetworkConAlertDialog(message: String) {
